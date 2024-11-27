@@ -39,7 +39,7 @@ const wallet = new MeshWallet({
 
 // User memasukan transaction hash aset yang didepositkan
 const txHashFromDesposit = await prompt("Transaction hash from lock: ");
-const refNumber = await prompt("Reference Number: ");
+const refNumber = await prompt("Reference Number (17925): ");
 
 // Mendapatkan index utxo berdasarkan transaction hash aset yang didepostikan di contract address
 const utxo = await getUtxoByTxHash(txHashFromDesposit);
@@ -57,9 +57,11 @@ const signerHash = deserializeAddress(walletAddress).pubKeyHash;
 // Membuat draft transaksi
 const txBuild = new MeshTxBuilder({
   fetcher: nodeProvider,
-  submitter: nodeProvider,
+  evaluator: nodeProvider,
+  verbose: true,
 });
 const txDraft = await txBuild
+  .setNetwork("preprod")
   .spendingPlutusScript("V3")
   .txIn(
     utxo.input.txHash,

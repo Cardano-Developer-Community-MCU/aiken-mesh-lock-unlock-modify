@@ -55,9 +55,11 @@ const assets: Asset[] = [{ unit: "lovelace", quantity: adaAmount }];
 // Membuat draft transaksi
 const txBuild = new MeshTxBuilder({
   fetcher: nodeProvider,
-  submitter: nodeProvider,
+  evaluator: nodeProvider,
+  verbose: true,
 });
 const txDraft = await txBuild
+  .setNetwork("preprod")
   .txOut(scriptAddr, assets)
   .txOutDatumHashValue(mConStr0([signerHash]))
   .changeAddress(walletAddress)
